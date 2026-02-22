@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef, createContext, useContext } from "react";
 import { PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
-import { Lock, Plus, Trash2, Download, Upload, Eye, EyeOff, TrendingUp, TrendingDown, Shield, LogOut, Calendar, Tag, DollarSign, Settings, X, Check, AlertTriangle, FileText, Search, Bell, Edit, Sun, Moon, CheckCircle, XCircle, Info, ShieldCheck, Wallet, PiggyBank, Users, Clock, Fingerprint, KeyRound } from "lucide-react";
+import { Lock, Plus, Trash2, Download, Upload, Eye, EyeOff, TrendingUp, TrendingDown, Shield, LogOut, Calendar, Tag, Settings, X, Check, AlertTriangle, FileText, Search, Bell, Edit, Sun, Moon, CheckCircle, XCircle, Info, ShieldCheck, Wallet, PiggyBank, Users, Fingerprint } from "lucide-react";
 
 /* ═══════════════════════ THEME SYSTEM ═══════════════════════ */
 const THEMES = {
@@ -477,7 +477,7 @@ function Auth({ onUnlock }) {
           <p style={{ fontSize: 13, color: T.textSec, marginTop: 6 }}>
             {mode === "setup" ? "\u{1F512} Create your family\u2019s secure vault" : "\u{1F513} Unlock your family vault"}
           </p>
-          <p style={{ fontSize: 11, color: T.textMut, marginTop: 4 }}>Private \u00B7 Encrypted \u00B7 Family Wealth Manager</p>
+          <p style={{ fontSize: 11, color: T.textMut, marginTop: 4 }}>Private &amp; Encrypted Family Wealth Manager</p>
         </div>
 
         {wiped && (
@@ -601,6 +601,9 @@ function App_Main({ initialData, password, onLogout }) {
   }, []);
 
   const CRD = { background: T.isDark ? 'rgba(255,255,255,0.025)' : '#ffffff', border: `1px solid ${T.border}`, borderRadius: 16, padding: 20, boxShadow: T.cardShadow };
+
+  // Currency icon component - shows the user's selected currency symbol instead of $
+  const CurIcon = ({ size, style }) => <span style={{ ...style, fontSize: size ? size - 1 : 14, fontWeight: 700, fontFamily: "'DM Sans',system-ui,sans-serif" }}>{cur}</span>;
 
   // Session timeout
   useEffect(() => {
@@ -738,8 +741,8 @@ function App_Main({ initialData, password, onLogout }) {
       <Fld label={"\u{1F3E6} Institution / Bank"} value={f.institution} onChange={e => u("institution", e.target.value)} placeholder="e.g. State Bank of India" />
       <Fld label={"\u{1F4C4} Account / Folio Number"} value={f.accountNo} onChange={e => u("accountNo", e.target.value)} placeholder="Account number" />
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        <Fld label={"\u{1F4B0} Principal Amount"} icon={DollarSign} type="number" value={f.principal || ""} onChange={e => u("principal", parseFloat(e.target.value) || 0)} />
-        <Fld label={"\u{1F4B5} Current Value"} icon={DollarSign} type="number" value={f.currentValue || ""} onChange={e => u("currentValue", parseFloat(e.target.value) || 0)} />
+        <Fld label={"\u{1F4B0} Principal Amount"} icon={CurIcon} type="number" value={f.principal || ""} onChange={e => u("principal", parseFloat(e.target.value) || 0)} />
+        <Fld label={"\u{1F4B5} Current Value"} icon={CurIcon} type="number" value={f.currentValue || ""} onChange={e => u("currentValue", parseFloat(e.target.value) || 0)} />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
         <Fld label={"\u{1F4CA} Interest %"} type="number" value={f.interestRate || ""} onChange={e => u("interestRate", parseFloat(e.target.value) || 0)} placeholder="%" />
@@ -771,7 +774,7 @@ function App_Main({ initialData, password, onLogout }) {
         <Sel label={"\u{1F4CB} Account Type"} value={f.type} onChange={e => u("type", e.target.value)}>
           {BANK_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
         </Sel>
-        <Fld label={"\u{1F4B0} Balance"} icon={DollarSign} type="number" value={f.balance || ""} onChange={e => u("balance", parseFloat(e.target.value) || 0)} />
+        <Fld label={"\u{1F4B0} Balance"} icon={CurIcon} type="number" value={f.balance || ""} onChange={e => u("balance", parseFloat(e.target.value) || 0)} />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         <Fld label={"\u{1F4CD} Branch"} value={f.branch} onChange={e => u("branch", e.target.value)} placeholder="Branch name" />
@@ -795,7 +798,7 @@ function App_Main({ initialData, password, onLogout }) {
       <div style={{ display: "flex", gap: 4, marginBottom: 16, background: T.ghostBg, borderRadius: 12, padding: 4 }}>
         {["expense", "income"].map(t => <div key={t} onClick={() => { u("type", t); u("category", ""); }} style={{ flex: 1, padding: "10px 0", borderRadius: 10, fontSize: 13, fontWeight: 600, textTransform: "capitalize", textAlign: "center", cursor: "pointer", background: f.type === t ? (t === "expense" ? T.dangerBg : T.successBg) : "transparent", color: f.type === t ? (t === "expense" ? T.danger : T.success) : T.textMut, transition: "all 0.15s" }}>{t === "expense" ? "\u{1F4B8}" : "\u{1F4B0}"} {t}</div>)}
       </div>
-      <Fld label={"\u{1F4B2} Amount"} icon={DollarSign} type="number" placeholder="0.00" value={f.amount} onChange={e => u("amount", e.target.value)} />
+      <Fld label={"\u{1F4B2} Amount"} icon={CurIcon} type="number" placeholder="0.00" value={f.amount} onChange={e => u("amount", e.target.value)} />
       <div style={{ marginBottom: 16 }}>
         <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: T.textSec, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>{"\u{1F3F7}"} Category</label>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(100px,1fr))", gap: 6 }}>
