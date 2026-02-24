@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: .
+      dockerfile: packages/api/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://wealthnest:wealthnest@db:5432/wealthnest
+      - JWT_SECRET=dev-secret-change-in-production
+      - NODE_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: wealthnest
+      POSTGRES_PASSWORD: wealthnest
+      POSTGRES_DB: wealthnest
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wealthnest"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

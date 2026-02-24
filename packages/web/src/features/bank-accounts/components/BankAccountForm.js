@@ -1,0 +1,14 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { useState } from 'react';
+import { Check } from 'lucide-react';
+import { BANK_TYPES } from '@wealthnest/shared';
+import { Button, Field, Select } from '@/design-system/primitives';
+import { useVault } from '@/hooks/useVaultData';
+export function BankAccountForm({ initial, onSave, onCancel }) {
+    const { currency } = useVault();
+    const [f, setF] = useState(initial || { bankName: '', accountNo: '', type: 'Savings', balance: 0, nominee: '', branch: '', ifsc: '', notes: '' });
+    const u = (k, v) => setF(p => ({ ...p, [k]: v }));
+    const CurIcon = ({ size, style }) => (_jsx("span", { style: { ...style, fontSize: size ? size - 1 : 14, fontWeight: 700, fontFamily: "'DM Sans',system-ui,sans-serif" }, children: currency }));
+    return (_jsxs(_Fragment, { children: [_jsx(Field, { label: '\u{1F3E6} Bank Name', value: f.bankName || '', onChange: e => u('bankName', e.target.value), placeholder: "e.g. HDFC Bank" }), _jsx(Field, { label: '\u{1F4C4} Account Number', value: f.accountNo || '', onChange: e => u('accountNo', e.target.value), placeholder: "Account number" }), _jsxs("div", { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }, children: [_jsx(Select, { label: '\u{1F4CB} Account Type', value: f.type, onChange: e => u('type', e.target.value), children: BANK_TYPES.map(t => _jsx("option", { value: t, children: t }, t)) }), _jsx(Field, { label: '\u{1F4B0} Balance', icon: CurIcon, type: "number", value: f.balance || '', onChange: e => u('balance', parseFloat(e.target.value) || 0) })] }), _jsxs("div", { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }, children: [_jsx(Field, { label: '\u{1F4CD} Branch', value: f.branch || '', onChange: e => u('branch', e.target.value), placeholder: "Branch name" }), _jsx(Field, { label: '\u{1F3F7} IFSC Code', value: f.ifsc || '', onChange: e => u('ifsc', e.target.value), placeholder: "IFSC" })] }), _jsx(Field, { label: '\u{1F464} Nominee', value: f.nominee || '', onChange: e => u('nominee', e.target.value), placeholder: "Nominee name" }), _jsx(Field, { label: '\u{1F4DD} Notes', textarea: true, value: f.notes || '', onChange: e => u('notes', e.target.value), placeholder: "Additional details..." }), _jsxs("div", { style: { display: 'flex', gap: 10, marginTop: 6 }, children: [_jsxs(Button, { variant: "success", full: true, onClick: () => onSave(f), children: [_jsx(Check, { size: 16 }), " ", initial ? 'Update Account' : 'Add Account'] }), _jsx(Button, { variant: "ghost", onClick: onCancel, children: "Cancel" })] })] }));
+}
+//# sourceMappingURL=BankAccountForm.js.map
